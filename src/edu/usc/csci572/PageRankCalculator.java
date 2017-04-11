@@ -15,15 +15,37 @@ public class PageRankCalculator {
 		build.extractlinksfromCSV("C:\\Users\\kaush\\CSCI_572\\ABCNewsData\\mapABCNewsDataFile.csv");
 		Graph g = build.buildGraph("C:\\Users\\kaush\\CSCI_572\\ABCNewsData\\ABCNewsDownloadData");
 		calculatePageRank(g);
+		writeLinks("links.txt",g);
 		writePageRank("pageRank.txt",g);
 		
-		for(Node n :g.getallNodes())
-		{
-			//System.out.println(n.getPageRank());
-		}
+
 		
 	}
 
+	public static void writeLinks(String fileName, Graph g)
+	{
+		try	{
+			
+			FileWriter out = new FileWriter(fileName); 
+			BufferedWriter bufferedWriter = new BufferedWriter(out);
+			for(Node node : g.getallNodes())
+			{
+				bufferedWriter.append("Incoming links for "+ node.getId()+ " " + node.numofIncominglinks());
+				bufferedWriter.newLine();
+				bufferedWriter.append("Outgoing links for "+ node.getId()+ " " + node.numofIncominglinks());
+				bufferedWriter.newLine();
+				bufferedWriter.newLine();
+			}
+			
+			bufferedWriter.close();
+			
+		}
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public static void writePageRank(String fileName,Graph g)
 	{
 		try	{
@@ -32,7 +54,7 @@ public class PageRankCalculator {
 			BufferedWriter bufferedWriter = new BufferedWriter(out);
 			for(Node node : g.getallNodes())
 			{
-				bufferedWriter.append("/home/kaushal/shared/ABCNewsData/ABCNewsDownloadData/"+node.getId()+" "+Double.toString(node.getPageRank()));
+				bufferedWriter.append("/home/kaushal/shared/ABCNewsData/ABCNewsDownloadData/"+node.getId()+"="+Double.toString(node.getPageRank()));
 				bufferedWriter.newLine();
 			}
 			
@@ -53,13 +75,14 @@ public class PageRankCalculator {
 		double damping_factor = 0.85;
 		int maxItr = 30;
 		double tol = 1e-6;
+		int total_links = 0;
 		for(Node node : g.getallNodes())
 		{
-			System.out.println("Outgoing links for this node "+node.numofOutgoinglinks());
-			System.out.println("Incoming links for this node "+node.numofIncominglinks());
 			
+			total_links += node.numofOutgoinglinks();
 			node.setPageRank(initial_score);
 		}
+		System.out.println("Total Number of links "+ total_links);
 		int itr = 0;
 		
 		while(itr<maxItr)

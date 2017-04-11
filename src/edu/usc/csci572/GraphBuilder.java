@@ -64,10 +64,6 @@ public class GraphBuilder {
 				System.out.println("Creating links for "+i);
 				i++;
 				
-				if(i==10)
-				{
-					break;
-				}
 				
 				File curFile = new File(folderLocation+"/"+current);
 				Document doc = Jsoup.parse(curFile, "UTF-8","http://abcnews.go.com/");
